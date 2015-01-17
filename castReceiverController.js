@@ -1,32 +1,4 @@
-// A subclass of PaddleController, which must implement: updatePaddle = function (court, paddle, ball)
-ChromecastPlayer.prototype = new Player();
-
-// KeyboardPlayer that controls a paddle using up and down keys on the keyboard
-function ChromecastPlayer(court, name) {
-    Player.apply(this, court);
-    this.name = name;
-}
-
-// Check what keys are pressed everytime we get asked to update our paddle position
-ChromecastPlayer.prototype.updatePaddle = function (ball) {
-    // this.paddle.move, moveUp, moveDown, stop
-};
-
-ChromecastPlayer.prototype.gameOver = function (won) {
-    // send a message to the player to tell them they won or lost
-    try {
-        var senderChannel = window.messageBus.getCastChannel(this.name);
-        if (won) {
-            senderChannel.send("GAME WON");
-        } else {
-            senderChannel.send("GAME LOST");
-        }
-    } catch(err) {
-        // We might have lost the game because we lost the connection and won't be able to send message
-    }
-};
-
-function CastController(court) {
+function CastController() {
     cast.receiver.logger.setLevelValue(0);
 
     window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
@@ -84,17 +56,65 @@ function CastController(court) {
                 window.messageBus.broadcast("GAME PAUSED");
                 break;
 
+            case "MoveUp":
+                window.players[event.senderId].updownCount++;
+                break;
+
+            case "MoveDown":
+                window.players[event.senderId].updownCount--;
+                break;
+
             default:
                 break;
         }
 
     };
 
+    window.court.enterMessage = "CONNECT TO CHROMECAST";
+    window.court.startMessage = "CLICK PLAY ICON";
+
     // start the CastReceiverManager with an application status message
     window.castReceiverManager.start({statusText: "Court is ready"});
 }
 
-// A method to set application state
-CastController.prototype.setState = function (state) {
-    window.castReceiverManager.setApplicationState(state);
+// A subclass of PaddleController, which must implement:
+// updatePaddle(court, paddle, ball)
+// gameOver(won)
+ChromecastPlayer.prototype = new Player();
+
+// ChromecastPlayer that controls a paddle using up and down keys on the keyboard
+function ChromecastPlayer(court, name) {
+    Player.apply(this, court);
+    this.name = name;
+    this.updownCount = 0;
+}
+
+/*
+This is called on each update of the screen. Move the paddle corresponding to the number of requests we got
+to move up/down from the sender since the last update
+ */
+ChromecastPlayer.prototype.updatePaddle = function () {
+    while (this.updownCount > 0) {
+        this.paddle.moveUp();
+        this.updownCount--;
+    }
+
+    while (this.updownCount < 0) {
+        this.paddle.moveDown();
+        this.updownCount++;
+    }
+};
+
+ChromecastPlayer.prototype.gameOver = function (won) {
+    // send a message to the player to tell them they won or lost
+    try {
+        var senderChannel = window.messageBus.getCastChannel(this.name);
+        if (won) {
+            senderChannel.send("GAME WON");
+        } else {
+            senderChannel.send("GAME LOST");
+        }
+    } catch(err) {
+        // We might have lost the game because we lost the connection and won't be able to send message
+    }
 };
