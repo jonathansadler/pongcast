@@ -1,5 +1,5 @@
 //////////////////////////////////// PADDLE ////////////////////////////////
-function Paddle(x, frontX, y, width, height, courtHeight, context, paddleColor) {
+function Paddle(x, frontX, y, width, height, courtHeight, context) {
     this.defaultSpeed = Math.floor((1 * courtHeight) / 100); // 2% of the height
     this.x = x;
     this.frontX = frontX;
@@ -11,14 +11,14 @@ function Paddle(x, frontX, y, width, height, courtHeight, context, paddleColor) 
     /* restrict movement and leave a gap at top and bottom */
     this.minY = this.halfHeight;
     this.maxY = courtHeight - this.height - this.halfHeight;
-    this.color = paddleColor;
     this.topSection = this.height / 3;
     this.bottomSection = (2 * this.height) / 3;
 }
 
 Paddle.prototype.bounce = function () {
-    var bounce = new Audio("paddle.mp3");
-    bounce.play();
+    //noinspection JSUnresolvedFunction
+    window.audio.src = "paddle.mp3";
+    window.audio.play();
 };
 
 Paddle.prototype.clear = function () {
@@ -183,7 +183,7 @@ Ball.prototype.draw = function () {
 
 //////////////////////////////////// GAME ////////////////////////////////
 function Game(court) {
-    window.outputLine("New Game");
+    console.log("New Game");
     this.court = court;
     this.court.game = this;
     this.pointsToWin = 21;
@@ -204,7 +204,7 @@ function Game(court) {
 }
 
 Game.prototype.point = function (player, opponent) {
-    window.outputLine("Point for player: " + player.name);
+    console.log("Point for player: " + player.name);
 
     this.court.scoreboard.pointWon(player);
 
@@ -217,7 +217,7 @@ Game.prototype.point = function (player, opponent) {
 };
 
 Game.prototype.end = function (winner, looser) {
-    window.outputLine("End of game. '" + winner.name + "' wins");
+    console.log("End of game. '" + winner.name + "' wins");
     winner.gameOver(true);
     looser.gameOver(false);
 
@@ -239,8 +239,9 @@ function ScoreBoard(court, scoreboardElement) {
 
 ScoreBoard.prototype.pointWon = function (player) {
     // Play point won sound
-    var pointWon = new Audio('point.mp3');
-    pointWon.play();
+    //noinspection JSUnresolvedFunction
+    window.audio.src = "point.mp3";
+    window.audio.play();
 
     // increment score of that player
     player.score++;
@@ -274,9 +275,9 @@ function Court(canvas) {
     var courtMiddleY = Math.floor((this.height - paddleHeight) / 2);
 
     this.paddles = new Array(2);
-    this.paddles[0] = new Paddle(paddleXOffset, paddleXOffset + paddleWidth, courtMiddleY, paddleWidth, paddleHeight, this.height, this.context, "#FFFFFF");
+    this.paddles[0] = new Paddle(paddleXOffset, paddleXOffset + paddleWidth, courtMiddleY, paddleWidth, paddleHeight, this.height, this.context);
     var front = this.width - paddleXOffset - paddleWidth;
-    this.paddles[1] = new Paddle(front, front, courtMiddleY, paddleWidth, paddleHeight, this.height, this.context, "#FFFFFF");
+    this.paddles[1] = new Paddle(front, front, courtMiddleY, paddleWidth, paddleHeight, this.height, this.context);
 
     // Create a new ball in the center of the court - not moving
     this.ballSize = 10;
@@ -307,8 +308,9 @@ Court.prototype.courtMessage = function () {
 };
 
 Court.prototype.bounce = function () {
-    var out = new Audio('out.mp3');
-    out.play();
+    //noinspection JSUnresolvedFunction
+    window.audio.src = "out.mp3";
+    window.audio.play();
 };
 
 Court.prototype.enter = function (player) {
@@ -319,17 +321,17 @@ Court.prototype.enter = function (player) {
         this.players[0].givePaddle(this.paddles[0]);
         this.paddles[0].draw();
         this.numPlayers++;
-        window.outputLine("Player '" + player.name + "' enters court, gets left paddle");
+        console.log("Player '" + player.name + "' enters court, gets left paddle");
         response = "PADDLE YES LEFT";
     } else if (this.players[1] == null) {
         this.players[1] = player;
         this.players[1].givePaddle(this.paddles[1]);
         this.paddles[1].draw();
         this.numPlayers++;
-        window.outputLine("Player '" + player.name + "' enters court, gets right paddle");
+        console.log("Player '" + player.name + "' enters court, gets right paddle");
         response = "PADDLE YES RIGHT";
     } else {
-        window.outputLine("PADDLE NONE");
+        console.log("PADDLE NONE");
         response = "PADDLE NONE";
     }
 
@@ -337,10 +339,11 @@ Court.prototype.enter = function (player) {
     return response;
 };
 
-Court.prototype.leave = function (looser) {
-    window.outputLine("Player '" + looser.name + "' has left the court");
+Court.prototype.leave = function (leaver) {
+    var winner;
+    console.log("Player '" + leaver.name + "' has left the court");
 
-    if (looser == this.players[0]) {
+    if (leaver == this.players[0]) {
         winner = this.players[1];
         this.players[0] = null;
     } else {
@@ -349,7 +352,7 @@ Court.prototype.leave = function (looser) {
     }
 
     if (this.game) {
-        this.game.end(winner, looser);
+        this.game.end(winner, leaver);
     } else {
         window.message(this.enterMessage);
     }
@@ -357,29 +360,36 @@ Court.prototype.leave = function (looser) {
     // and remove from the court
     this.numPlayers--;
 
-    this.ball.clear();
+    if (this.ball) {
+        this.ball.clear();
+    }
 
     // Reclaim his paddle
-    looser.paddle.clear();
-    looser.paddle = null;
+    leaver.paddle.clear();
+    leaver.paddle = null;
 };
 
 Court.prototype.draw = function () {
     // update paddle positions
     if (this.players[0]) {
-        var move = this.players[0].updatePaddle(this.ball);
-        if (move != 0) {
+        var move_0 = this.players[0].updatePaddle(this.ball);
+        if (move_0 != 0) {
             this.paddles[0].clear();
-            this.paddles[0].move(move);
+            this.paddles[0].move(move_0);
         }
     }
 
     if (this.players[1]) {
-        var move = this.players[1].updatePaddle(this.ball);
-        if (move != 0) {
+        var move_1 = this.players[1].updatePaddle(this.ball);
+        if (move_1 != 0) {
             this.paddles[1].clear();
-            this.paddles[1].move(move);
+            this.paddles[1].move(move_1);
         }
+    }
+
+    if (window.debug > 1) {
+        //noinspection JSUnresolvedVariable
+        console.log('    to move paddle took ' + (performance.now() - window.start) + ' ms');
     }
 
     if (this.ball) {
@@ -397,9 +407,18 @@ Court.prototype.draw = function () {
 
         // Draw the ball at the new position
         this.ball.draw();
+        if (window.debug > 1) {
+            //noinspection JSUnresolvedVariable
+            console.log('    to draw ball took ' + (performance.now() - window.start) + ' ms');
+        }
+
         // Draw them after the ball may have deleted a part of them
         this.paddles[0].draw();
         this.paddles[1].draw();
+        if (window.debug > 1) {
+            //noinspection JSUnresolvedVariable
+            console.log('    to draw paddles took ' + (performance.now() - window.start) + ' ms');
+        }
     }
 };
 
@@ -411,7 +430,7 @@ Court.prototype.startPlay = function () {
 
     window.message("");
 
-    window.outputLine("Starting play");
+    console.log("Starting play");
     this.paused = false;
     this.update();
 };
@@ -419,15 +438,15 @@ Court.prototype.startPlay = function () {
 // TODO Control game state here
 Court.prototype.pausePlay = function () {
     this.paused = true;
-    window.outputLine("Play paused");
-    window.message("PAUSED. SPACE TO RESTART");
+    console.log("Play paused");
+    window.message(window.court.pausedMessage);
 };
 
 // TODO Control game state here
 Court.prototype.restartPlay = function () {
     this.paused = false;
     window.message("");
-    window.outputLine("Play restarted");
+    console.log("Play restarted");
     this.update();
 };
 
@@ -444,9 +463,30 @@ Court.prototype.togglePlay = function () {
 // This will be called from window on refresh
 Court.prototype.update = function () {
     if (!window.court.paused) {
-        window.court.draw();
+        if (window.debug) {
+            //noinspection JSUnresolvedVariable
+            console.log('time since last update ' + (performance.now() - window.start) + ' ms');
+        }
+        //noinspection JSUnresolvedVariable
+        window.start = performance.now();
+
+        window.court.draw(); // my drawing routing
+
+        //noinspection JSUnresolvedVariable
+        var end = performance.now();
+        if (window.debug) {
+            console.log('to exit court.draw() took ' + (end - window.start) + ' ms');
+        }
 
         // reschedule next animation update
         window.requestAnimationFrame(window.court.update);
     }
+};
+
+window.enableDebug = function enableDebug() {
+    window.debug = 1;
+};
+
+window.enableStats = function enableStats() {
+    window.stats = true;
 };
