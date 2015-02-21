@@ -309,7 +309,7 @@ Court.prototype.courtMessage = function () {
 
 Court.prototype.bounce = function () {
     //noinspection JSUnresolvedFunction
-    window.audio.src = "out.mp3";
+    window.audio.src = "wall.mp3";
     window.audio.play();
 };
 
