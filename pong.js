@@ -466,7 +466,7 @@ Court.prototype.update = function () {
         if (window.debug) {
             //noinspection JSUnresolvedVariable
             var start = performance.now();
-            console.log('Time since last frame ' + (start - window.start) + ' ms');
+            console.log('Time since last frame ' + (start - window.start).toFixed(2) + ' ms');
             window.start = start;
         }
 
@@ -476,7 +476,7 @@ Court.prototype.update = function () {
             //noinspection JSUnresolvedVariable
             var end = performance.now();
 
-            console.log('court.draw() took ' + (end - start) + ' ms');
+            console.log('court.draw() took ' + (end - window.start) + ' ms');
         }
 
         // reschedule next animation update
