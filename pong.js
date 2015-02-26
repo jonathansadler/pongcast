@@ -466,6 +466,8 @@ Court.prototype.update = function () {
         if (window.debug) {
             //noinspection JSUnresolvedVariable
             var start = performance.now();
+            console.log('Time since last frame ' + (start - window.start) + ' ms');
+            window.start = start;
         }
 
         window.court.draw(); // my drawing routing
