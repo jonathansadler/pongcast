@@ -465,17 +465,16 @@ Court.prototype.update = function () {
     if (!window.court.paused) {
         if (window.debug) {
             //noinspection JSUnresolvedVariable
-            console.log('time since last update ' + (performance.now() - window.start) + ' ms');
+            var start = performance.now();
         }
-        //noinspection JSUnresolvedVariable
-        window.start = performance.now();
 
         window.court.draw(); // my drawing routing
 
-        //noinspection JSUnresolvedVariable
-        var end = performance.now();
         if (window.debug) {
-            console.log('to exit court.draw() took ' + (end - window.start) + ' ms');
+            //noinspection JSUnresolvedVariable
+            var end = performance.now();
+
+            console.log('court.draw() took ' + (end - start) + ' ms');
         }
 
         // reschedule next animation update
