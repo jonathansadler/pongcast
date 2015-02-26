@@ -16,16 +16,20 @@
         }
 
         canvas {
-            width: 100%;
-            height: 100%;
             position: fixed;
             margin: 0;
             padding: 0;
             background: #999999;
         }
 
+        #overlay {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+        }
+
         #scoreboard {
-            width: 100%;
+            width: 1280px;
             height: 50px;
             text-align: center;
             position: fixed;
@@ -35,12 +39,11 @@
         }
 
         #messageboard {
-            width: 100%;
+            position: fixed;
+            bottom: 80px;
+            width: 1280px;
             height: 50px;
             text-align: center;
-            vertical-align: bottom;
-            position: fixed;
-            bottom: 20px;
             font: 50px Pong;
             color: #ffffff;
         }
@@ -83,7 +86,7 @@
             KeyboardController();
         }
 
-        canvas.onclick = function() {
+        canvas.onclick = function () {
             if (document.fullscreenEnabled || document.webkitFullscreenEnabled) {
                 canvas.webkitRequestFullscreen()
             }
@@ -96,15 +99,14 @@
     };
 </script>
 
-<!--
-<canvas id='court' width="960" height="540">Your browser does not support canvas - go get Chrome!</canvas>
--->
-<canvas id='court' width="240" height="135">Your browser does not support canvas - go get Chrome!</canvas>
-<div id="scoreboard">
-    <span class="left"></span>
-    <span class="right"></span>
+<canvas id='court' width="1280px" height="720px">Your browser does not support canvas - go get Chrome!</canvas>
+<div id="overlay">
+    <div id="scoreboard">
+        <span class="left"></span>
+        <span class="right"></span>
+    </div>
+    <div id="messageboard"></div>
 </div>
-<div id="messageboard"></div>
 
 <audio id='audio' src="wall.mp3" type="audio/mpeg">
 </audio>
