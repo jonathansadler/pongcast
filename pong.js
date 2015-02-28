@@ -46,13 +46,13 @@ function Ball(court, ballSize) {
     this.court = court;
     this.ballSize = ballSize;
     this.halfBallSize = ballSize >> 1;
-    this.x = (this.court.width  >> 1) - this.halfBallSize;
+    this.x = (this.court.width >> 1) - this.halfBallSize;
     this.y = (this.court.height >> 1) - this.halfBallSize;
     this.minX = -this.halfBallSize;
     this.maxX = this.court.width - this.halfBallSize;
     this.minY = -this.halfBallSize;
     this.maxY = this.court.height - this.halfBallSize;
-    this.y_speed = 1;
+    this.y_speed = -1;
     this.x_speed = court.width >> 8; // / 256
 }
 
@@ -64,7 +64,7 @@ function Ball(court, ballSize) {
  */
 Ball.prototype.bouncePaddle = function (paddle) {
     // Gain a bit of speed with every bounce
-    this.x_speed = -(this.x_speed +1);
+    this.x_speed = -(this.x_speed + 1);
 
     if (this.y < paddle.y + paddle.topSection) {
         if (this.y_speed == 0) {
@@ -89,13 +89,13 @@ Ball.prototype.bouncePaddle = function (paddle) {
     window.audio.play();
 };
 
-Ball.prototype.update = function () {
-    var oldX = this.x;
-
-    // update position according to its speed
-    this.x += this.x_speed;
-    this.y += this.y_speed;
-
+// Result
+// -1 player 0 failed
+// -2 player 1 failed
+// 0 nothing happened
+// 1 bounced off player 0
+// 2 bunced off player 1
+Ball.prototype.getCollisons = function () {
     // check for hitting the top wall
     if (this.y <= this.minY) {
         this.y = this.minY;
@@ -130,24 +130,24 @@ Ball.prototype.update = function () {
                 return -1;
             }
 
-            // was in front off, and now touching or behind paddle
-            if ((oldX > this.court.paddles[0].frontX) && (this.y + this.ballSize > this.court.paddles[0].y) &&
+            if ((this.y + this.ballSize > this.court.paddles[0].y) &&
                 (this.y < (this.court.paddles[0].y + this.court.paddles[0].height))) {
                 this.bouncePaddle(this.court.paddles[0]);
+                return 1;
             }
         }
     } else { // Going right
         // touching or behind paddle
-        if ((this.x > this.court.paddles[1].frontX)) {
+        if ((this.x >= this.court.paddles[1].frontX)) {
             // if leaves the court at the right
             if (this.x > this.maxX) {
-                return 1;
+                return -2;
             }
 
-            // was in front off, and now touching or behind paddle
             if ((this.y + this.ballSize > this.court.paddles[1].y) &&
                 (this.y < (this.court.paddles[1].y + this.court.paddles[1].height))) {
                 this.bouncePaddle(this.court.paddles[1]);
+                return 2;
             }
         }
     }
@@ -315,10 +315,10 @@ Court.prototype.leave = function (leaver) {
 
     // Delete the ball
     if (this.ball) {
-        this.context.clearRect( this.ball.x - this.ball.halfBallSize,
-                                this.ball.y - this.halfBallSize,
-                                this.ball.ballSize,
-                                this.ball.ballSize);
+        this.context.clearRect(this.ball.x - this.ball.halfBallSize,
+            this.ball.y - this.halfBallSize,
+            this.ball.ballSize,
+            this.ball.ballSize);
     }
 
     // Delete his paddle
@@ -328,17 +328,22 @@ Court.prototype.leave = function (leaver) {
 };
 
 Court.prototype.draw = function () {
+    var moves = [];
+
     // update paddle positions for both players
-    for(var num = 0; num < 2; num++) {
+    for (var num = 0; num < 2; num++) {
         var player = this.players[num];
         if (player) {
             var paddle = player.paddle;
             if (paddle) {
-                var move = player.updatePaddle(this.ball);
-                if (move != 0) {
-                    this.context.clearRect(paddle.x, paddle.y, paddle.width, paddle.height);
+                moves[num] = player.updatePaddle(this.ball);
+                if (moves[num] != 0) {
+                    if (window.draw) {
+                        this.context.clearRect(this.paddles[num].x, this.paddles[num].y,
+                            this.paddles[num].width, this.paddles[num].height);
+                    }
 
-                    paddle.y += move;
+                    paddle.y += moves[num];
 
                     // Stop at the top of the court
                     if (paddle.y <= paddle.minY) {
@@ -356,41 +361,53 @@ Court.prototype.draw = function () {
         console.log('    elapsed time to clear() and move() paddles: ' + (performance.now() - window.start) + ' ms');
     }
 
-    if (this.ball && window.draw) {
-        this.context.clearRect( this.ball.x,
-                                this.ball.y,
-                                this.ball.ballSize,
-                                this.ball.ballSize);
+    if (this.ball) {
+        if (window.draw) {
+            this.context.clearRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
+        }
 
-        // Update the ball position and detect if it has exited one end of the court or another
-        var result = this.ball.update();
+        // detect collisions at previous position
+        var result = this.ball.getCollisons();
+
+        this.ball.x += this.ball.x_speed;
+        this.ball.y += this.ball.y_speed;
+
+        if (window.draw) {
+            this.context.fillRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
+        }
 
         if (window.debug > 1) {
             //noinspection JSUnresolvedVariable
-            console.log('    elapsed time to end of ball.clear and ball.update: ' + (performance.now() - window.start) + ' ms');
+            console.log('    elapsed time to end of ball.getCollisons: ' + (performance.now() - window.start) + ' ms');
         }
 
-        if (result != 0) {
-            if (result == -1)
+        if (result < 0) {
+            // Delete part of old ball still on screen
+            this.context.clearRect(this.ball.oldX, this.ball.oldY, this.ball.ballSize, this.ball.ballSize);
+
+            if (result == -1) {
                 this.game.point(this.players[1], this.players[0]);
-            else
+            }
+            else if (result == -2) {
                 this.game.point(this.players[0], this.players[1]);
+            }
         }
-
-        // Draw the ball at the new position
-        this.context.fillRect(  this.ball.x,
-                                this.ball.y,
-                                this.ball.ballSize,
-                                this.ball.ballSize);
 
         if (window.debug > 1) {
             //noinspection JSUnresolvedVariable
             console.log('    elapsed time to end of ball.draw(): ' + (performance.now() - window.start) + ' ms');
         }
+    }
 
-        // Draw paddles after the ball may have deleted a part of them
-        this.context.fillRect(this.paddles[0].x, this.paddles[0].y, this.paddles[0].width, this.paddles[0].height);
-        this.context.fillRect(this.paddles[1].x, this.paddles[1].y, this.paddles[1].width, this.paddles[1].height);
+    if (window.draw) {
+        // Draw paddles after the ball may have deleted a part of them, or they moved
+        var paddleTouched = result - 1;
+        for (var num = 0; num < 2; num++) {
+            if ((moves[num] != 0) || (paddleTouched == num)) {
+                this.context.fillRect(this.paddles[num].x, this.paddles[num].y,
+                    this.paddles[num].width, this.paddles[num].height);
+            }
+        }
     }
 
     if (window.debug > 1) {
@@ -409,7 +426,7 @@ Court.prototype.startPlay = function () {
 
     console.log("Starting play");
     this.paused = false;
-    this.update();
+    this.getCollisons();
 };
 
 // TODO Control game state
@@ -424,7 +441,7 @@ Court.prototype.restartPlay = function () {
     this.paused = false;
     window.message("");
     console.log("Play restarted");
-    this.update();
+    this.getCollisons();
 };
 
 // TODO Control game state
@@ -438,7 +455,7 @@ Court.prototype.togglePlay = function () {
 };
 
 // This will be called from window on refresh
-Court.prototype.update = function () {
+Court.prototype.getCollisons = function () {
     if (!window.court.paused) {
         if (window.debug) {
             //noinspection JSUnresolvedVariable
@@ -456,8 +473,8 @@ Court.prototype.update = function () {
             console.log('court.draw() took ' + (end - window.start) + ' ms');
         }
 
-        // reschedule next animation update
-        window.requestAnimationFrame(window.court.update);
+        // reschedule next animation getCollisons
+        window.requestAnimationFrame(window.court.getCollisons);
     }
 };
 

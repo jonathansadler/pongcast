@@ -55,7 +55,7 @@ function KeyboardPlayer(court, name) {
     console.log("Keyboard Player ready");
 }
 
-// Check what keys are pressed everytime we get asked to update our paddle position
+// Check what keys are pressed everytime we get asked to getCollisons our paddle position
 KeyboardPlayer.prototype.updatePaddle = function () {
     if (window.keysDown.length > 0) {
         for (var key in window.keysDown) {

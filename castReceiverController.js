@@ -106,8 +106,8 @@ function ChromecastPlayer(court, name) {
 }
 
 /*
- This is called on each update of the screen. Move the paddle corresponding to the number of requests we got
- to move up/down from the sender since the last update
+ This is called on each getCollisons of the screen. Move the paddle corresponding to the number of requests we got
+ to move up/down from the sender since the last getCollisons
  */
 ChromecastPlayer.prototype.updatePaddle = function () {
     var movement = -(this.paddle.defaultSpeed * this.updownCount);
