@@ -374,7 +374,7 @@ Court.prototype.draw = function () {
     // update paddle positions
     if (this.players[0]) {
         var move_0 = this.players[0].updatePaddle(this.ball);
-        if (move_0 != 0 && window.draw) {
+        if (move_0 != 0) {
             this.paddles[0].clear();
             this.paddles[0].move(move_0);
         }
@@ -382,7 +382,7 @@ Court.prototype.draw = function () {
 
     if (this.players[1]) {
         var move_1 = this.players[1].updatePaddle(this.ball);
-        if (move_1 != 0 && window.draw) {
+        if (move_1 != 0) {
             this.paddles[1].clear();
             this.paddles[1].move(move_1);
         }
