@@ -297,6 +297,7 @@ function Court(canvas) {
 
     // Install into the global window object
     window.court = this;
+    window.draw = 1;
 }
 
 Court.prototype.courtMessage = function () {
@@ -373,7 +374,7 @@ Court.prototype.draw = function () {
     // update paddle positions
     if (this.players[0]) {
         var move_0 = this.players[0].updatePaddle(this.ball);
-        if (move_0 != 0) {
+        if (move_0 != 0 && window.draw) {
             this.paddles[0].clear();
             this.paddles[0].move(move_0);
         }
@@ -381,7 +382,7 @@ Court.prototype.draw = function () {
 
     if (this.players[1]) {
         var move_1 = this.players[1].updatePaddle(this.ball);
-        if (move_1 != 0) {
+        if (move_1 != 0 && window.draw) {
             this.paddles[1].clear();
             this.paddles[1].move(move_1);
         }
@@ -389,14 +390,19 @@ Court.prototype.draw = function () {
 
     if (window.debug > 1) {
         //noinspection JSUnresolvedVariable
-        console.log('    to move paddle took ' + (performance.now() - window.start) + ' ms');
+        console.log('    elapsed time to clear() and move() paddles: ' + (performance.now() - window.start) + ' ms');
     }
 
-    if (this.ball) {
+    if (this.ball && window.draw) {
         this.ball.clear();
 
         // Update the ball position and detect if it has exited one end of the court or another
         var result = this.ball.update();
+
+        if (window.debug > 1) {
+            //noinspection JSUnresolvedVariable
+            console.log('    elapsed time to end of ball.clear and ball.update: ' + (performance.now() - window.start) + ' ms');
+        }
 
         if (result != 0) {
             if (result == -1)
@@ -409,15 +415,16 @@ Court.prototype.draw = function () {
         this.ball.draw();
         if (window.debug > 1) {
             //noinspection JSUnresolvedVariable
-            console.log('    to draw ball took ' + (performance.now() - window.start) + ' ms');
+            console.log('    elapsed time to end of ball.draw(): ' + (performance.now() - window.start) + ' ms');
         }
 
         // Draw them after the ball may have deleted a part of them
         this.paddles[0].draw();
         this.paddles[1].draw();
+
         if (window.debug > 1) {
             //noinspection JSUnresolvedVariable
-            console.log('    to draw paddles took ' + (performance.now() - window.start) + ' ms');
+            console.log('    elapsed time to to end of paddles.draw(): ' + (performance.now() - window.start) + ' ms');
         }
     }
 };
