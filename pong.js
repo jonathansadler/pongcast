@@ -402,12 +402,13 @@ Court.prototype.draw = function () {
     if (window.draw) {
         // Draw paddles after the ball may have deleted a part of them, or they moved
         var paddleTouched = result - 1;
-        for (var num = 0; num < 2; num++) {
+        var num = 1;
+        do {
             if ((moves[num] != 0) || (paddleTouched == num)) {
                 this.context.fillRect(this.paddles[num].x, this.paddles[num].y,
                     this.paddles[num].width, this.paddles[num].height);
             }
-        }
+        } while(--num >= 0);
     }
 
     if (window.debug > 1) {
