@@ -1,6 +1,6 @@
 //////////////////////////////////// PADDLE ////////////////////////////////
 function Paddle(x, frontX, y, width, height, courtHeight) {
-    this.defaultSpeed = courtHeight >> 7; // 1/128 of the height
+    this.defaultSpeed = courtHeight >> 6; // 1/128 of the height
     this.x = x;
     this.frontX = frontX;
     this.y = y;
@@ -52,8 +52,8 @@ function Ball(court, ballSize) {
     this.maxX = this.court.width - this.halfBallSize;
     this.minY = -this.halfBallSize;
     this.maxY = this.court.height - this.halfBallSize;
-    this.y_speed = -1;
-    this.x_speed = court.width >> 8; // / 256
+    this.y_speed = -2;
+    this.x_speed = court.width >> 7; // / 256
 }
 
 /*
@@ -233,7 +233,7 @@ function Court(canvas) {
     this.width = canvas.width;
     this.height = canvas.height;
 
-    // set the fill for ball and paddles from now on
+    // set the fill for ball and paddles and net from now on
     this.context.fillStyle = "#FFFFFF";
 
     var paddleWidth = 10;
@@ -423,7 +423,7 @@ Court.prototype.startPlay = function () {
         this.game = new Game(this);
     }
 
-    window.message("");
+    window.hideMessage();
 
     console.log("Starting play");
     this.paused = false;
@@ -440,7 +440,7 @@ Court.prototype.pausePlay = function () {
 // TODO Control game state
 Court.prototype.restartPlay = function () {
     this.paused = false;
-    window.message("");
+    window.hideMessage();
     console.log("Play restarted");
     this.getCollisons();
 };
