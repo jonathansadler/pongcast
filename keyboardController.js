@@ -31,7 +31,7 @@ function KeyboardPlayer(court, name) {
     window.addEventListener("keydown", function (event) {
         var value = Number(event.keyCode);
 
-        if (value == 115) { // 's'
+        if (value == 83) { // 's'
             court.startPlay();
         }
 

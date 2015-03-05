@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="841d17d4-13d3-426e-8022-f73ab07962ff" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.sh" afterPath="$PROJECT_DIR$/build.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keyboardController.js" afterPath="$PROJECT_DIR$/keyboardController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pong.html" afterPath="$PROJECT_DIR$/pong.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keyboardController.min.js" afterPath="$PROJECT_DIR$/keyboardController.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="pongcast-receiver.iws" />
@@ -30,42 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pong.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pong.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5348">
-              <caret line="2" column="40" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
-              <folding>
-                <element signature="n#!!block;n#Player#0" expanded="false" />
-                <element signature="n#!!block;n#ComputerPlayer#0" expanded="false" />
-                <element signature="e#6753#7110#0" expanded="false" />
-                <element signature="e#8447#9410#0" expanded="false" />
-                <element signature="e#9455#10324#0" expanded="false" />
-                <element signature="e#13806#13913#0" expanded="false" />
-                <element signature="e#14170#14305#0" expanded="false" />
-                <element signature="e#14397#15071#0" expanded="false" />
-                <element signature="e#15118#15143#0" expanded="false" />
-                <element signature="e#15190#15218#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="keyboardController.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/keyboardController.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="169" max-vertical-offset="1134">
-              <caret line="49" column="12" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="pong.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pong.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.11931818" vertical-offset="0" max-vertical-offset="1876">
-              <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+              <caret line="6" column="39" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -91,8 +59,8 @@
         <option value="$PROJECT_DIR$/castReceiverController.js" />
         <option value="$PROJECT_DIR$/pong.min.js" />
         <option value="$PROJECT_DIR$/pong.js" />
-        <option value="$PROJECT_DIR$/keyboardController.js" />
         <option value="$PROJECT_DIR$/build.sh" />
+        <option value="$PROJECT_DIR$/keyboardController.js" />
         <option value="$PROJECT_DIR$/pong.html" />
       </list>
     </option>
@@ -356,7 +324,7 @@
       <workItem from="1424720082437" duration="4358000" />
       <workItem from="1425127447196" duration="449000" />
       <workItem from="1425140538508" duration="15519000" />
-      <workItem from="1425215921130" duration="3095000" />
+      <workItem from="1425215921130" duration="3644000" />
     </task>
     <task id="LOCAL-00001" summary="Added timing debugging info">
       <created>1424979804027</created>
@@ -422,7 +390,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23574000" />
+    <option name="totallyTimeSpent" value="24123000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
@@ -448,7 +416,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28040057" sideWeight="0.7771883" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28040057" sideWeight="0.7771883" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35496688" sideWeight="0.52582496" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19081779" sideWeight="0.6710875" order="9" side_tool="true" content_ui="tabs" />
@@ -630,9 +598,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05982906" vertical-offset="0" max-vertical-offset="702">
+          <caret line="3" column="76" selection-start-line="3" selection-start-column="76" selection-end-line="3" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keyboardController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40302613" vertical-offset="169" max-vertical-offset="1134">
+          <caret line="33" column="23" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pong.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5348">
+        <state vertical-scroll-proportion="0.038514443" vertical-offset="0" max-vertical-offset="5348">
           <caret line="2" column="40" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
           <folding>
             <element signature="n#!!block;n#Player#0" expanded="false" />
@@ -649,26 +633,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05982906" vertical-offset="0" max-vertical-offset="702">
-          <caret line="3" column="76" selection-start-line="3" selection-start-column="76" selection-end-line="3" selection-end-column="76" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keyboardController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="169" max-vertical-offset="1134">
-          <caret line="49" column="12" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pong.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.11931818" vertical-offset="0" max-vertical-offset="1876">
-          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+          <caret line="6" column="39" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="39" />
           <folding />
         </state>
       </provider>
