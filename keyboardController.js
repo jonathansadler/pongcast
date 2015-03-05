@@ -31,7 +31,7 @@ function KeyboardPlayer(court, name) {
     window.addEventListener("keydown", function (event) {
         var value = Number(event.keyCode);
 
-        if ((value == 83) || (value == 115)) { // 's' or 'S'
+        if (value == 115) { // 's'
             court.startPlay();
         }
 
@@ -39,15 +39,15 @@ function KeyboardPlayer(court, name) {
             court.togglePlay();
         }
 
-        if ((value == 15) || (value == 68)) { // 'd' or 'D'
+        if (value == 68) { // 'd'
             window.enableDebug();
         }
 
-        if ((value == 16) || (value == 69)) { // 'e' or 'E'
+        if (value == 69) { // 'e'
             window.court.enter(window.keyboardPlayer);
         }
 
-        if ((value == 23) || (value == 76)) { // 'l' or 'L'
+        if (value == 76) { // 'l'
             window.court.leave(window.keyboardPlayer);
         }
     });
