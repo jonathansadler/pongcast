@@ -34,7 +34,7 @@ function ComputerPlayer(court, name) {
 
 ComputerPlayer.prototype.updatePaddle = function (ball) {
     var diff = this.paddle.y + this.paddle.halfHeight - ball.y;
-    return -diff >> 2;
+    return -diff >> 3;
 };
 
 ComputerPlayer.prototype.gameOver = function (won) {
@@ -47,7 +47,7 @@ function Ball(court, ballSize) {
     this.ballSize = ballSize;
     this.halfBallSize = ballSize >> 1;
     this.x = (this.court.width >> 1) - this.halfBallSize;
-    this.y = (this.court.height >> 1) - this.halfBallSize;
+    this.y = Math.floor(Math.random() * this.court.height);
     this.minX = -this.halfBallSize;
     this.maxX = this.court.width - this.halfBallSize;
     this.minY = -this.halfBallSize;
@@ -102,6 +102,7 @@ Ball.prototype.getCollisons = function () {
 
         // bounce off wall
         this.y_speed = -this.y_speed;
+
         //noinspection JSUnresolvedFunction
         window.audio.src = "wall.mp3";
         window.audio.play();
@@ -123,7 +124,7 @@ Ball.prototype.getCollisons = function () {
     }
 
     if (this.x_speed < 0) { // Going left
-        // touching or behind paddle
+        // in line with or behind paddle
         if ((this.x <= this.court.paddles[0].frontX)) {
             // Check for exiting court left - using the middle of the ball to calculate that
             if (this.x < this.minX) {
@@ -137,7 +138,7 @@ Ball.prototype.getCollisons = function () {
             }
         }
     } else { // Going right
-        // touching or behind paddle
+        // in line with or behind paddle
         if ((this.x >= this.court.paddles[1].frontX)) {
             // if leaves the court at the right
             if (this.x > this.maxX) {
@@ -233,7 +234,7 @@ function Court(canvas) {
     this.width = canvas.width;
     this.height = canvas.height;
 
-    // set the fill for ball and paddles and net from now on
+    // set the fill for ball and paddles from now on
     this.context.fillStyle = "#FFFFFF";
 
     var paddleWidth = 10;
@@ -258,12 +259,13 @@ function Court(canvas) {
     this.players[1] = null;
     this.numPlayers = 0;
     this.game = null;
+    this.moves = [];
+    this.result = 0;
 
     window.message(this.enterMessage);
 
     // Install into the global window object
     window.court = this;
-    window.draw = 1;
 }
 
 Court.prototype.enter = function (player) {
@@ -328,22 +330,19 @@ Court.prototype.leave = function (leaver) {
 };
 
 Court.prototype.draw = function () {
-    var moves = [];
-
     // update paddle positions for both players
-    for (var num = 0; num < 2; num++) {
+    var num = 1;
+    do {
         var player = this.players[num];
         if (player) {
             var paddle = player.paddle;
             if (paddle) {
-                moves[num] = player.updatePaddle(this.ball);
-                if (moves[num] != 0) {
-                    if (window.draw) {
-                        this.context.clearRect(this.paddles[num].x, this.paddles[num].y,
-                            this.paddles[num].width, this.paddles[num].height);
-                    }
+                this.moves[num] = player.updatePaddle(this.ball);
+                if (this.moves[num] != 0) {
+                    this.context.clearRect(this.paddles[num].x, this.paddles[num].y,
+                        this.paddles[num].width, this.paddles[num].height);
 
-                    paddle.y += moves[num];
+                    paddle.y += this.moves[num];
 
                     // Stop at the top of the court
                     if (paddle.y <= paddle.minY) {
@@ -354,7 +353,7 @@ Court.prototype.draw = function () {
                 }
             }
         }
-    }
+    } while (--num >= 0);
 
     if (window.debug > 1) {
         //noinspection JSUnresolvedVariable
@@ -362,33 +361,28 @@ Court.prototype.draw = function () {
     }
 
     if (this.ball) {
-        if (window.draw) {
-            this.context.clearRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
-        }
+        this.context.clearRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
 
         // detect collisions at previous position
-        var result = this.ball.getCollisons();
-
+        this.result = this.ball.getCollisons();
         this.ball.x += this.ball.x_speed;
         this.ball.y += this.ball.y_speed;
 
-        if (window.draw) {
-            this.context.fillRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
-        }
+        this.context.fillRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
 
         if (window.debug > 1) {
             //noinspection JSUnresolvedVariable
             console.log('    elapsed time to end of ball.getCollisons: ' + (performance.now() - window.start) + ' ms');
         }
 
-        if (result < 0) {
+        if (this.result < 0) {
             // Delete part of old ball still on screen
-            this.context.clearRect(this.ball.oldX, this.ball.oldY, this.ball.ballSize, this.ball.ballSize);
+            this.context.clearRect(this.ball.x, this.ball.y, this.ball.ballSize, this.ball.ballSize);
 
-            if (result == -1) {
+            if (this.result == -1) {
                 this.game.point(this.players[1], this.players[0]);
             }
-            else if (result == -2) {
+            else if (this.result == -2) {
                 this.game.point(this.players[0], this.players[1]);
             }
         }
@@ -399,17 +393,15 @@ Court.prototype.draw = function () {
         }
     }
 
-    if (window.draw) {
-        // Draw paddles after the ball may have deleted a part of them, or they moved
-        var paddleTouched = result - 1;
-        var num = 1;
-        do {
-            if ((moves[num] != 0) || (paddleTouched == num)) {
-                this.context.fillRect(this.paddles[num].x, this.paddles[num].y,
-                    this.paddles[num].width, this.paddles[num].height);
-            }
-        } while(--num >= 0);
-    }
+    // Draw paddles after the ball may have deleted a part of them, or they moved
+    var paddleTouched = this.result - 1;
+    num = 1;
+    do {
+        if ((this.moves[num] != 0) || (paddleTouched == num)) {
+            this.context.fillRect(this.paddles[num].x, this.paddles[num].y,
+                this.paddles[num].width, this.paddles[num].height);
+        }
+    } while (--num >= 0);
 
     if (window.debug > 1) {
         //noinspection JSUnresolvedVariable
@@ -427,7 +419,7 @@ Court.prototype.startPlay = function () {
 
     console.log("Starting play");
     this.paused = false;
-    this.getCollisons();
+    this.update();
 };
 
 // TODO Control game state
@@ -442,7 +434,7 @@ Court.prototype.restartPlay = function () {
     this.paused = false;
     window.hideMessage();
     console.log("Play restarted");
-    this.getCollisons();
+    this.update();
 };
 
 // TODO Control game state
@@ -456,7 +448,7 @@ Court.prototype.togglePlay = function () {
 };
 
 // This will be called from window on refresh
-Court.prototype.getCollisons = function () {
+Court.prototype.update = function () {
     if (!window.court.paused) {
         if (window.debug) {
             //noinspection JSUnresolvedVariable
@@ -474,8 +466,8 @@ Court.prototype.getCollisons = function () {
             console.log('court.draw() took ' + (end - window.start) + ' ms');
         }
 
-        // reschedule next animation getCollisons
-        window.requestAnimationFrame(window.court.getCollisons);
+        // reschedule next animation
+        window.requestAnimationFrame(window.court.update);
     }
 };
 
