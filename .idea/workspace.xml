@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="841d17d4-13d3-426e-8022-f73ab07962ff" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pong.html" afterPath="$PROJECT_DIR$/pong.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pong.js" afterPath="$PROJECT_DIR$/pong.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="pongcast-receiver.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,21 +30,11 @@
       <file leaf-file-name="pong.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pong.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.57771665" vertical-offset="84" max-vertical-offset="6454">
+            <state vertical-scroll-proportion="0.69325995" vertical-offset="0" max-vertical-offset="6454">
               <caret line="36" column="21" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="21" />
               <folding>
                 <element signature="e#2148#3011#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pong.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pong.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.434782" vertical-offset="220" max-vertical-offset="1806">
-              <caret line="46" column="22" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -72,8 +60,8 @@
         <option value="$PROJECT_DIR$/pong.min.js" />
         <option value="$PROJECT_DIR$/build.sh" />
         <option value="$PROJECT_DIR$/keyboardController.js" />
-        <option value="$PROJECT_DIR$/pong.html" />
         <option value="$PROJECT_DIR$/pong.js" />
+        <option value="$PROJECT_DIR$/pong.html" />
       </list>
     </option>
   </component>
@@ -337,7 +325,7 @@
       <workItem from="1425127447196" duration="449000" />
       <workItem from="1425140538508" duration="15519000" />
       <workItem from="1425215921130" duration="6675000" />
-      <workItem from="1425814529047" duration="1720000" />
+      <workItem from="1425814529047" duration="1929000" />
     </task>
     <task id="LOCAL-00001" summary="Added timing debugging info">
       <created>1424979804027</created>
@@ -403,7 +391,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28874000" />
+    <option name="totallyTimeSpent" value="29083000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
@@ -608,15 +596,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pong.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.434782" vertical-offset="220" max-vertical-offset="1806">
-          <caret line="46" column="22" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.1846591" vertical-offset="80" max-vertical-offset="1820">
+          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pong.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.57771665" vertical-offset="84" max-vertical-offset="6454">
+        <state vertical-scroll-proportion="0.69325995" vertical-offset="0" max-vertical-offset="6454">
           <caret line="36" column="21" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="21" />
           <folding>
             <element signature="e#2148#3011#0" expanded="false" />
